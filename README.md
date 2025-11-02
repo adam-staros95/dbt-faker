@@ -1,1 +1,1 @@
-Lightweight DBT package for generating fake data
+Lightweight DBT package for faking data
