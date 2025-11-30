@@ -6,8 +6,5 @@
 {% endmacro %}
 
 {% macro get_supported_locales() %}
-    {% set supported_locales = ['en_US', 'pl_PL'] %}
-    {{ return(supported_locales) }}
+    {% set supported_locales = ['en_US', 'pl_PL'] %} {{ return(supported_locales) }}
 {% endmacro %}
-
-
