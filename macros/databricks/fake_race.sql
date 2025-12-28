@@ -1,0 +1,4 @@
+{% macro databricks__fake_race(seed_column, locale='en_US') %}
+    {% set locale_map = dbt_faker.get_races_by_locale() %}
+    {{ return(dbt_faker.databricks__fake_value_from_map(seed_column, locale_map, locale)) }}
+{% endmacro %}
