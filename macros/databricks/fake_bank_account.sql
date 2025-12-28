@@ -2,43 +2,11 @@
     {% if locale == 'pl_PL' %}
         concat(
             'PL',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast({{ seed_column }} as string))), 1000000000
-                    ) as string
-                ),
-                9,
-                '0'
-            ),
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '1') as string))),
-                        1000000000
-                    ) as string
-                ),
-                9,
-                '0'
-            ),
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '2') as string))),
-                        1000000
-                    ) as string
-                ),
-                6,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000000, 9) }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000000, 9, '1') }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000, 6, '2') }}
         )
     {% elif locale == 'en_US' %}
-        lpad(
-            cast(
-                mod(abs(hash(cast({{ seed_column }} as string))), 9999999999) as string
-            ),
-            10,
-            '0'
-        )
+        {{ dbt_faker.databricks__random_digit_string(seed_column, 9999999999, 10) }}
     {% endif %}
 {% endmacro %}

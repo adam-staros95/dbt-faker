@@ -1,92 +1,20 @@
 {% macro databricks__fake_card_number(seed_column, formatted=true) %}
     {% if formatted %}
         concat(
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part1') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part1') }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part2') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part2') }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part3') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part3') }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part4') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part4') }}
         )
     {% else %}
         concat(
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part1') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part2') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part3') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_part4') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part1') }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part2') }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part3') }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_part4') }}
         )
     {% endif %}
 {% endmacro %}

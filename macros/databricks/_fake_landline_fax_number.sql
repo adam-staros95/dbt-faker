@@ -2,80 +2,22 @@
     {% if locale == 'en_US' %}
         concat(
             '(',
-            lpad(
-                cast(
-                    200
-                    + mod(abs(hash(cast({{ seed_column }} as string))), 800) as string
-                ),
-                3,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 800, 3, offset=200) }},
             ') ',
-            lpad(
-                cast(
-                    200 + mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_mid') as string))),
-                        800
-                    ) as string
-                ),
-                3,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 800, 3, '_mid', 200) }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_end') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_end') }}
         )
     {% elif locale == 'pl_PL' %}
         concat(
             '+48 ',
-            lpad(
-                cast(
-                    10 + mod(abs(hash(cast({{ seed_column }} as string))), 90) as string
-                ),
-                2,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 90, 2, offset=10) }},
             ' ',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_mid') as string))),
-                        1000
-                    ) as string
-                ),
-                3,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000, 3, '_mid') }},
             ' ',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_end') as string))),
-                        1000
-                    ) as string
-                ),
-                3,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000, 3, '_end') }},
             ' ',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_end2') as string))),
-                        100
-                    ) as string
-                ),
-                2,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 100, 2, '_end2') }}
         )
     {% endif %}
 {% endmacro %}

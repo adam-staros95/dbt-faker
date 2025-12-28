@@ -2,56 +2,17 @@
     {% if locale == 'pl_PL' %}
         concat(
             'POL',
-            lpad(
-                cast(
-                    mod(abs(hash(cast({{ seed_column }} as string))), 1000000) as string
-                ),
-                6,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000, 6) }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_seq') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_seq') }}
         )
     {% elif locale == 'en_US' %}
         concat(
-            lpad(
-                cast(
-                    mod(abs(hash(cast({{ seed_column }} as string))), 1000000) as string
-                ),
-                6,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000, 6) }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_group') as string))),
-                        100000
-                    ) as string
-                ),
-                5,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 100000, 5, '_group') }},
             '-',
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_policy') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_policy') }}
         )
     {% endif %}
 {% endmacro %}
