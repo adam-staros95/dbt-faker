@@ -2,17 +2,17 @@
     {% if locale == 'pl_PL' %}
         concat(
             'POL',
-            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000, 6) }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=1000000, width=6) }},
             '-',
-            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_seq') }}
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=10000, width=4, suffix='_seq') }}
         )
     {% elif locale == 'en_US' %}
         concat(
-            {{ dbt_faker.databricks__random_digit_string(seed_column, 1000000, 6) }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=1000000, width=6) }},
             '-',
-            {{ dbt_faker.databricks__random_digit_string(seed_column, 100000, 5, '_group') }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=100000, width=5, suffix='_group') }},
             '-',
-            {{ dbt_faker.databricks__random_digit_string(seed_column, 10000, 4, '_policy') }}
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=10000, width=4, suffix='_policy') }}
         )
     {% endif %}
 {% endmacro %}

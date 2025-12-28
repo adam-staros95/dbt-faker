@@ -17,7 +17,8 @@
 
     element_at(
         array({{ quoted_letters | join(', ') }}),
-        1 + {{ dbt_faker.databricks__hash_mod(seed_column, 26, suffix) }}
+        1
+        + {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=26, suffix=suffix) }}
     )
 {% endmacro %}
 
@@ -25,7 +26,8 @@
     lpad(
         cast(
             {{ offset }}
-            + {{ dbt_faker.databricks__hash_mod(seed_column, range, suffix) }} as string
+            + {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=range, suffix=suffix) }}
+            as string
         ),
         {{ width }},
         '0'
