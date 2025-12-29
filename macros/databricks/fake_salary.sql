@@ -9,13 +9,11 @@
     cast(
         (
             {{ min_salary }}
-            + mod(abs(hash(cast({{ seed_column }} as string))), {{ salary_range + 1 }})
+            + {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=(salary_range + 1)) }}
         ) + (
             cast(
-                mod(
-                    abs(hash(cast(concat({{ seed_column }}, '_decimal') as string))),
-                    100
-                ) as double
+                {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=100, suffix='_decimal') }}
+                as double
             )
             / 100.0
         ) as {{ return_type }}
