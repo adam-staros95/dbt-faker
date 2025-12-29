@@ -1,6 +1,7 @@
 {% macro databricks__fake_email(seed_column, locale='en_US') %}
     {% set domain_map = dbt_faker.get_email_domains_by_locale() %}
     {% set domains = domain_map[locale] %}
+    {% set domains_count = domains | length %}
     {% set quoted_domains = [] %}
     {% for domain in domains %}
         {% do quoted_domains.append("'" ~ domain ~ "'") %}
@@ -8,7 +9,7 @@
 
     concat(
         case
-            mod(abs(hash(cast({{ seed_column }} as string))), 6)
+            {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=6) }}
             when 0
             then
                 concat(
@@ -28,12 +29,8 @@
                 concat(
                     lower({{ dbt_faker.fake_first_name(seed_column, locale) }}),
                     cast(
-                        mod(
-                            abs(
-                                hash(cast(concat({{ seed_column }}, '_num') as string))
-                            ),
-                            9999
-                        ) as string
+                        {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=9999, suffix='_num') }}
+                        as string
                     )
                 )
             when 3
@@ -56,22 +53,16 @@
                 concat(
                     'user',
                     cast(
-                        mod(
-                            abs(
-                                hash(cast(concat({{ seed_column }}, '_rand') as string))
-                            ),
-                            999999
-                        ) as string
+                        {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=999999, suffix='_rand') }}
+                        as string
                     )
                 )
         end,
         '@',
         element_at(
             array({{ quoted_domains | join(', ') }}),
-            1 + mod(
-                abs(hash(cast(concat({{ seed_column }}, '_domain') as string))),
-                {{ domains | length }}
-            )
+            1
+            + {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=domains_count, suffix='_domain') }}
         )
     )
 {% endmacro %}

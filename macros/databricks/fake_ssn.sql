@@ -1,100 +1,30 @@
 {% macro databricks__fake_ssn(seed_column, locale='en_US') %}
     {% if locale == 'pl_PL' %}
         concat(
-            lpad(
-                cast(mod(abs(hash(cast({{ seed_column }} as string))), 100) as string),
-                2,
-                '0'
-            ),
-            lpad(
-                cast(
-                    1 + mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_month') as string))),
-                        12
-                    ) as string
-                ),
-                2,
-                '0'
-            ),
-            lpad(
-                cast(
-                    1 + mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_day') as string))), 28
-                    ) as string
-                ),
-                2,
-                '0'
-            ),
-            lpad(
-                cast(
-                    mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_seq') as string))),
-                        10000
-                    ) as string
-                ),
-                4,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=100, width=2) }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=12, width=2, suffix='_month', offset=1) }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=28, width=2, suffix='_day', offset=1) }},
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=10000, width=4, suffix='_seq') }},
             cast(
-                mod(
-                    abs(hash(cast(concat({{ seed_column }}, '_check') as string))), 10
-                ) as string
+                {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=10, suffix='_check') }}
+                as string
             )
         )
     {% elif locale == 'en_US' %}
         concat(
             case
-                when mod(abs(hash(cast({{ seed_column }} as string))), 899) < 665
+                when
+                    {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=899) }}
+                    < 665
                 then
-                    lpad(
-                        cast(
-                            1 + mod(
-                                abs(hash(cast({{ seed_column }} as string))), 665
-                            ) as string
-                        ),
-                        3,
-                        '0'
-                    )
+                    {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=665, width=3, offset=1) }}
                 else
-                    lpad(
-                        cast(
-                            667 + mod(
-                                abs(
-                                    hash(
-                                        cast(
-                                            concat({{ seed_column }}, '_area') as string
-                                        )
-                                    )
-                                ),
-                                233
-                            ) as string
-                        ),
-                        3,
-                        '0'
-                    )
+                    {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=233, width=3, suffix='_area', offset=667) }}
             end,
             '-',
-            lpad(
-                cast(
-                    1 + mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_group') as string))),
-                        99
-                    ) as string
-                ),
-                2,
-                '0'
-            ),
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=99, width=2, suffix='_group', offset=1) }},
             '-',
-            lpad(
-                cast(
-                    1 + mod(
-                        abs(hash(cast(concat({{ seed_column }}, '_serial') as string))),
-                        9999
-                    ) as string
-                ),
-                4,
-                '0'
-            )
+            {{ dbt_faker.databricks__random_digit_string(seed_column=seed_column, range=9999, width=4, suffix='_serial', offset=1) }}
         )
     {% endif %}
 {% endmacro %}

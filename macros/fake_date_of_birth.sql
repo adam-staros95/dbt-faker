@@ -1,9 +1,5 @@
 {% macro fake_date_of_birth(seed_column, locale='en_US', min_date=none, max_date=none, minimum_age=none, maximum_age=none, return_type='date') %}
     {% do dbt_faker.validate_locale(locale) %}
-    {% set supported_return_types = ['string', 'timestamp', 'date'] %}
-    {% if return_type not in supported_return_types %}
-        {% do exceptions.raise_compiler_error("Invalid return_type: '" ~ return_type ~ "'. Supported return types are: " ~ (supported_return_types | join(", "))) %}
-    {% endif %}
     {% if (minimum_age is not none or maximum_age is not none) and (min_date is not none or max_date is not none) %}
         {% do exceptions.raise_compiler_error("Cannot provide both age parameters (minimum_age, maximum_age) and date parameters (min_date, max_date). Please use either age-based or date-based parameters.") %}
     {% endif %}

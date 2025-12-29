@@ -1,4 +1,8 @@
 {% macro databricks__fake_date_of_birth(seed_column, locale='en_US', min_date=none, max_date=none, minimum_age=none, maximum_age=none, return_type='date') %}
+    {% set supported_return_types = ['string', 'timestamp', 'date'] %}
+    {% if return_type not in supported_return_types %}
+        {% do exceptions.raise_compiler_error("Invalid return_type for Databricks: '" ~ return_type ~ "'. Supported return types are: " ~ (supported_return_types | join(", "))) %}
+    {% endif %}
     {% if minimum_age is not none and maximum_age is not none %}
         {% set age_expr = dbt_faker.databricks__fake_age(seed_column=seed_column, minimum_age=minimum_age, maximum_age=maximum_age, return_type='int') %}
         {% set dob_date = "date_sub(current_date(), " ~ age_expr ~ " * 365)" %}

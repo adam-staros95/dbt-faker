@@ -1,27 +1,21 @@
 {% macro databricks__fake_home_number(seed_column, locale='en_US') %}
     concat(
         cast(
-            1 + mod(
-                abs(hash(cast(concat({{ seed_column }}, '_street_num') as string))), 200
-            ) as string
+            1
+            + {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=200, suffix='_street_num') }}
+            as string
         ),
         case
             when
-                mod(abs(hash(cast(concat({{ seed_column }}, '_apt') as string))), 2) = 0
+                {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=2, suffix='_apt') }}
+                = 0
             then
                 concat(
                     '/',
                     cast(
-                        1 + mod(
-                            abs(
-                                hash(
-                                    cast(
-                                        concat({{ seed_column }}, '_apt_num') as string
-                                    )
-                                )
-                            ),
-                            100
-                        ) as string
+                        1
+                        + {{ dbt_faker.databricks__hash_mod(seed_column=seed_column, range=100, suffix='_apt_num') }}
+                        as string
                     )
                 )
             else ''
